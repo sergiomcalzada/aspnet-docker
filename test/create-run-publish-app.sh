@@ -19,7 +19,9 @@ function __exec {
 cd $1
 
 echo "Testing framework-dependent deployment"
-if [[ $2 == "1.1"* ]]; then
+if [[ $2 == "2.0"* ]]; then
+    framework="netcoreapp2.0"
+elif [[ $2 == "1.1"* ]]; then
     framework="netcoreapp1.1"
 else
     framework='netcoreapp1.0'
@@ -27,11 +29,16 @@ fi
 __exec dotnet new web --framework $framework
 
 # restore only from $HOME/.nuget/packages to ensure the cache has already been warmed up
-__exec dotnet msbuild "/t:Restore;Publish" \
-    "/p:RuntimeIdentifiers=debian.8-x64" \
-    "/p:PublishDir=publish/framework-dependent" \
-    "/p:RestoreSources=$HOME/.nuget/packages"
+__exec dotnet restore \
+    --source "$HOME/.nuget/packages" \
+    "/p:RuntimeIdentifiers=debian.8-x64"
+
+echo "Testing framework-dependent deployment"
+__exec dotnet publish \
+    --output publish/framework-dependent
 
 echo "Testing self-contained deployment"
-__exec dotnet publish -r debian.8-x64 -o publish/self-contained
+__exec dotnet publish \
+    --runtime debian.8-x64 \
+    --output publish/self-contained
 
