@@ -22,7 +22,7 @@ RUN setx /M PATH $($Env:PATH + ';' + $Env:ProgramFiles + '/nodejs' + ';' + $Env:
 COPY packagescache.csproj C:/warmup/packagescache.csproj
 
 RUN dotnet restore C:/warmup/packagescache.csproj `
-      --source https://dotnet.myget.org/F/aspnetcore-ci-release/api/v3/index.json `
+      --source https://dotnet.myget.org/F/aspnetcore-release/api/v3/index.json `
       --source https://dotnet.myget.org/F/dotnet-core/api/v3/index.json `
       --source https://api.nuget.org/v3/index.json; `
     Remove-Item -Recurse -Force C:/warmup
