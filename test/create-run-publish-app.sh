@@ -35,10 +35,12 @@ __exec dotnet restore \
 
 echo "Testing framework-dependent deployment"
 __exec dotnet publish \
+    --configuration Release \
     --output publish/framework-dependent
 
 echo "Testing self-contained deployment"
 __exec dotnet publish \
+    --configuration Release \
     --runtime debian.8-x64 \
     --output publish/self-contained
 
